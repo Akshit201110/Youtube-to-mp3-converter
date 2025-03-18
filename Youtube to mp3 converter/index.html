@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Youtube to mp3 converter</title>
+    <style>
+        
+        ::placeholder {
+        color: red;
+        opacity: 1; /* Firefox */
+        }
+
+        ::-ms-input-placeholder { /* Edge 12-18 */
+        color: red;
+        }
+        
+    </style>
+</head>
+<body style="margin: 0px;">
+    <div style="vertical-align: middle;width: 100vw; background-color: gold; height: 50vh; display: table-cell; text-align: center;">
+            <h1 style="color: white; margin: 0px; font-size: 7vw;">
+                Youtube To Mp3 Converter
+            </h1>
+    </div>
+    <center>
+        <div style="width: 100%; height: 50vh; background-color: red;">
+            <div style="display: flex; gap: 0px; justify-content: center;">
+                <input type="text" name="video_id" id="video_id" placeholder="Paste Youtube Video Link" style="width: 650px; height: 45px; position: relative; bottom: 27px; border-radius: 30px 0px 0px 30px; background-color: lightgreen; color: red; font-weight: bold;">
+                <button id="convert_btn1" style="height: 51px; position: relative; bottom: 27px; right: 2px; border-radius: 0px 30px 30px 0px; background-color: lightgreen; color: red; font-weight: bold;">Convert</button>
+            </div>
+            <a href="" id="download_button1"><button id="download_button_main1" style="height: 51px; background-color: lightgreen; color: red; font-weight: bold; display: none;">Download</button></a>
+        </div>
+    </center>
+    <script>
+        
+        async function download_func() {
+            if (document.getElementById("video_id").value != "undefined" && document.getElementById("video_id").value != "null" && document.getElementById("video_id").value != "") {
+
+                var str1 = document.getElementById("video_id").value.split("/watch?v=")[1];
+                var str2 = "";
+                console.log(typeof(str1));
+                if(typeof(str1) === "undefined" || typeof(str1) === "null" || str1 == ""){
+
+                    
+                    str2 = document.getElementById("video_id").value.split("/watch?v=")[0].split("youtu.be/")[1];
+                    final_str1 = str2.substring(0, 11);
+
+
+                }else{
+                    
+                    var final_str1 = str1.substring(0, 11);
+                    
+                }
+                console.log(final_str1);
+                
+                const url = 'https://youtube-mp36.p.rapidapi.com/dl?id='+final_str1;
+                const options = {
+                    method: 'GET',
+                    headers: {
+                        'x-rapidapi-key': '9d9126698dmshfba3eb408a9794dp19a733jsn474d2f46f0c1',
+                        'x-rapidapi-host': 'youtube-mp36.p.rapidapi.com'
+                    }
+                };
+
+            
+            
+                try {
+                    const response = await fetch(url, options);
+                    const result = await response.text();
+                    const remove_link1 = result.split('"link":"');
+                    const remove_link2 = remove_link1[1].split('","title"');
+                    console.log(remove_link2[0]);
+
+                    document.getElementById("download_button1").setAttribute("href", remove_link2[0]);
+                    
+                    document.getElementById("download_button_main1").style.display = "";
+
+                } catch (error) {
+                    console.error(error);
+                }
+            }
+        }
+
+        document.getElementById("convert_btn1").addEventListener("click", function () {
+            console.log("hello");
+            download_func();
+        });
+    </script>
+</body>
+</html>
